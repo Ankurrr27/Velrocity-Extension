@@ -1,61 +1,56 @@
-# Verlocity Browser Extension
+# Velrocity Elite Extension ⚡
 
-This folder contains a standalone browser extension for Verlocity.
+The official browser companion for the **Velrocity Productivity Workspace**. This extension brings your clinical, data-driven habit tracking and goal management directly into your browser's side panel.
 
-## What it does
+## About Velrocity Elite
 
-- opens in the browser side panel instead of a popup
-- lets someone enter a Verlocity username
-- fetches a public profile by username
-- shows that user's public habits for today
-- lets you change the API base URL from the settings page
+Velrocity is designed for elite performers who need a silent, high-density interface to manage their daily routine. The extension allows you to stay focused on your deep work while having instantaneous access to your progress.
 
-## Folder structure
+### Key Features
+- **Elite Design System**: A compact, premium interface optimized for productivity.
+- **Real-Time Habit Tracking**: Tick off your daily habits without leaving your current tab.
+- **Goal Management**: Quick-add and toggle your daily goals with a streamlined workflow.
+- **Live Streak Tracking**: Stay motivated with your global streak count prominently displayed.
+- **Dual Themes**: Seamless switching between high-contrast Dark mode and clinical Light mode.
 
-- `manifest.json`: extension manifest
-- `background.js`: opens the side panel when the extension icon is clicked
-- `sidepanel.html`, `sidepanel.js`: main side panel UI
-- `popup.css`: shared extension styling
-- `options.html`, `options.js`: extension settings page
+---
 
-## Load it locally
+## How to Use
 
-### Chromium browsers
+### 1. Installation
+1. Download or clone this repository.
+2. Open your browser and navigate to `chrome://extensions`.
+3. Enable **Developer mode** (top right).
+4. Click **Load unpacked** and select this directory.
 
-1. Open `chrome://extensions`
-2. Enable `Developer mode`
-3. Click `Load unpacked`
-4. Select this `Extension` folder
-5. Click the Verlocity extension icon to open the side panel
+### 2. Configuration
+1. Click the extension icon to open the **Velrocity Side Panel**.
+2. Click the **Settings (⚙️)** icon at the bottom.
+3. Enter your **Elite Key** (Auth Token) from your Velrocity Dashboard settings.
+4. (Optional) Adjust the API Base URL if you are using a self-hosted backend.
 
-### Firefox
+### 3. Daily Workflow
+- **Habits Tab**: View and toggle your scheduled habits for the current day.
+- **Goals Tab**: Add quick goals and toggle them as "Smashed It" to track your micro-wins.
+- **Theme Switch**: Click the 🌓 icon in the header to toggle between light and dark visuals.
+- **Dashboard Link**: Use the bottom link to jump directly to your full Velrocity Dashboard for advanced analytics.
 
-This version is designed around the Chromium side panel API, so Chromium browsers are the main target for now.
+---
 
-## How it works
+## Folder Structure
+- `js/ui/components.js`: Atomic UI components for cards and buttons.
+- `js/ui/renderers.js`: Specialized list rendering and skeleton logic.
+- `js/core/api.js`: Unified API request handler with Auth support.
+- `popup.css`: The "Elite" design system tokens and styles.
+- `sidepanel.html/js`: The core side panel entry point.
 
-1. Click the extension icon
-2. The Verlocity side panel opens on the right side
-3. Enter a Verlocity username
-4. If that profile is public, the extension fetches:
-   - public profile details
-   - today’s public habit status
+---
 
-## API setup
+## Technical Notes
+- Built with Vanilla JS & Semantic HTML for zero-overhead performance.
+- Uses `chrome.storage` for persistent theme and auth state synchronization.
+- Optimized for the Chromium Side Panel API.
 
-By default the extension uses:
+---
 
-- `https://habit-tracker-ixsb.onrender.com`
-
-You can change that from the extension settings page if you want to point it at a local backend such as:
-
-- `http://localhost:5000`
-
-## Notes
-
-- The extension stores the last looked-up username in browser extension local storage.
-- The side panel uses these public backend routes:
-  - `GET /users/public/:username`
-  - `GET /activity/public/:username/status`
-- Only public profiles can be fetched without login.
-- This version is read-only by design, which avoids letting someone edit another user’s habits just by typing their username.
+© 2026 Velrocity Elite. Built for those who demand more from their workspace.

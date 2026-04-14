@@ -1,14 +1,15 @@
-import { getSettings, authRequest } from "./js/core/api.js";
+import { getSettings, authRequest, storageSet } from "./js/core/api.js";
 import { getTodayKey, getTodayLabel } from "./js/utils/date-utils.js";
 import { showStatus, clearStatus } from "./js/utils/status.js";
-import { showSkeleton } from "./js/ui/renderers.js";
+import { showSkeleton, renderList } from "./js/ui/renderers.js";
 import { switchTab } from "./js/ui/tabs.js";
 
 // DOM ELEMENTS
-const todayHabitsContainer = document.getElementById("todayHabits");
 const openSettingsButton = document.getElementById("openSettings");
 const openWebAppButton = document.getElementById("openWebApp");
 const todayLabel = document.getElementById("todayLabel");
+const streakWrapper = document.getElementById("streakWrapper");
+const streakCount = document.getElementById("streakCount");
 
 const myGoalsView = document.getElementById("myGoalsView");
 const myGoalsForm = document.getElementById("myGoalsForm");
@@ -20,6 +21,7 @@ const myHabitsList = document.getElementById("myHabitsList");
 
 const habitsTab = document.getElementById("habitsTab");
 const goalsTab = document.getElementById("goalsTab");
+const themeToggle = document.getElementById("themeToggle");
 
 // STATE
 const VIEWS = [myPersonalHabitsView, myGoalsView];
@@ -36,56 +38,32 @@ async function renderMyHabits() {
   showSkeleton(myHabitsList, 5);
 
   try {
-    const habits = await authRequest("/stats/today");
-    myHabitsList.innerHTML = "";
-
-    const list = Array.isArray(habits) ? habits : [];
-    if (!list.length) {
-      myHabitsList.innerHTML = '<div class="empty-state">No habits scheduled for today. Have a rest!</div>';
-      return;
-    }
-
+    const data = await authRequest("/stats/today");
+    const list = Array.isArray(data.habits) ? data.habits : [];
     const sorted = [...list].sort((a, b) => (a.done === b.done ? 0 : a.done ? 1 : -1));
 
-    sorted.forEach((habit) => {
-      const card = document.createElement("article");
-      card.className = "surface-card";
-
-      const meta = document.createElement("div");
-      meta.className = "card-meta";
-      const title = document.createElement("h3");
-      title.textContent = habit.title;
-      if (habit.done) {
-        title.style.textDecoration = "line-through";
-        title.style.opacity = "0.6";
+    // Update Streak
+    if (streakWrapper && streakCount) {
+      if (data.streak > 0) {
+        streakWrapper.classList.remove("hidden");
+        streakCount.textContent = data.streak;
+      } else {
+        streakWrapper.classList.add("hidden");
       }
+    }
 
-      const copy = document.createElement("p");
-      copy.textContent = habit.type || "Daily";
-      meta.appendChild(title);
-      meta.appendChild(copy);
-
-      const toggleBtn = document.createElement("button");
-      toggleBtn.className = `action-pill ${habit.done ? "done" : "pending"}`;
-      toggleBtn.textContent = habit.done ? "Done" : "Check";
-      toggleBtn.onclick = async () => {
+    renderList(myHabitsList, sorted, {
+      type: "habit",
+      onToggle: async (habit, toggle) => {
         try {
-          toggleBtn.disabled = true;
-          await authRequest("/activity/toggle", "POST", {
-            habitId: habit.habitId,
-            date: getTodayKey(),
-          });
+          toggle.style.pointerEvents = "none";
+          await authRequest("/activity/toggle", "POST", { habitId: habit.habitId, date: getTodayKey() });
           await renderMyHabits();
         } catch (e) {
           showStatus(e.message, "error");
-        } finally {
-          toggleBtn.disabled = false;
+          toggle.style.pointerEvents = "auto";
         }
-      };
-
-      card.appendChild(meta);
-      card.appendChild(toggleBtn);
-      myHabitsList.appendChild(card);
+      }
     });
   } catch (err) {
     myHabitsList.innerHTML = `<div class="empty-state" style="color:var(--danger)">Connection Error: ${err.message}</div>`;
@@ -103,80 +81,29 @@ async function renderMyGoals() {
 
   try {
     const tasks = await authRequest("/tasks");
-    myGoalsList.innerHTML = "";
     const list = Array.isArray(tasks) ? tasks : [];
-    
-    if (!list.length) {
-      myGoalsList.innerHTML = `<div class="empty-state">No active goals. Stay focused!</div>`;
-      return;
-    }
-
     const sorted = [...list].sort((a, b) => (a.status === b.status ? 0 : a.status === "done" ? 1 : -1));
 
-    sorted.forEach((task) => {
-      const card = document.createElement("article");
-      card.className = "surface-card";
-      
-      const meta = document.createElement("div");
-      meta.className = "card-meta";
-      const title = document.createElement("h3");
-      title.textContent = task.title;
-      if (task.status === "done") {
-        title.style.textDecoration = "line-through";
-        title.style.opacity = "0.6";
-      }
-
-      const copy = document.createElement("p");
-      copy.textContent = task.status === "pending" ? "In Progress" : "Achieved Goal";
-      
-      meta.appendChild(title);
-      meta.appendChild(copy);
-
-      const actionDiv = document.createElement("div");
-      actionDiv.style.display = "flex";
-      actionDiv.style.gap = "8px";
-
-      const toggleBtn = document.createElement("button");
-      toggleBtn.className = `action-pill ${task.status === "done" ? "done" : "pending"}`;
-      toggleBtn.textContent = task.status === "done" ? "Undo" : "Complete";
-      toggleBtn.onclick = async () => {
+    renderList(myGoalsList, sorted, {
+      type: "goal",
+      onToggle: async (task, toggle) => {
         try {
-          toggleBtn.disabled = true;
+          toggle.style.pointerEvents = "none";
           await authRequest(`/tasks/${task._id}/toggle`, "PATCH");
           await renderMyGoals();
         } catch (e) {
           showStatus(e.message, "error");
-        } finally {
-          toggleBtn.disabled = false;
+          toggle.style.pointerEvents = "auto";
         }
-      };
-
-      const delBtn = document.createElement("button");
-      delBtn.className = "btn-circle";
-      delBtn.style.width = "28px";
-      delBtn.style.height = "28px";
-      delBtn.style.background = "#ef4444";
-      delBtn.style.color = "white";
-      delBtn.style.border = "none";
-      delBtn.style.borderRadius = "8px";
-      delBtn.style.fontSize = "16px";
-      delBtn.style.cursor = "pointer";
-      delBtn.innerHTML = "×";
-      delBtn.onclick = async () => {
+      },
+      onDelete: async (task) => {
         try {
           await authRequest(`/tasks/${task._id}`, "DELETE");
           await renderMyGoals();
         } catch (e) {
           showStatus(e.message, "error");
         }
-      };
-
-      actionDiv.appendChild(toggleBtn);
-      actionDiv.appendChild(delBtn);
-
-      card.appendChild(meta);
-      card.appendChild(actionDiv);
-      myGoalsList.appendChild(card);
+      }
     });
   } catch (err) {
     myGoalsList.innerHTML = `<div class="empty-state" style="color:var(--danger)">Error: ${err.message}</div>`;
@@ -189,6 +116,14 @@ openWebAppButton?.addEventListener("click", () => chrome.tabs.create({ url: "htt
 
 habitsTab?.addEventListener("click", () => switchTab("myPersonalHabitsView", habitsTab, VIEWS, TABS));
 goalsTab?.addEventListener("click", () => switchTab("myGoalsView", goalsTab, VIEWS, TABS));
+
+themeToggle?.addEventListener("click", async () => {
+  const isLight = document.body.getAttribute("data-theme") === "light";
+  const nextTheme = isLight ? "dark" : "light";
+  document.body.setAttribute("data-theme", nextTheme);
+  themeToggle.textContent = isLight ? "🌓" : "☀️";
+  await storageSet({ habtrackTheme: nextTheme });
+});
 
 myGoalsForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -221,6 +156,14 @@ async function refreshAllData() {
 
 (async function init() {
   if (todayLabel) todayLabel.textContent = getTodayLabel();
+  
+  // Persistent Theme
+  const settings = await getSettings();
+  if (settings.theme === "light") {
+    document.body.setAttribute("data-theme", "light");
+    if (themeToggle) themeToggle.textContent = "☀️";
+  }
+
   await refreshAllData();
   setInterval(refreshAllData, 5 * 60 * 1000);
 })();

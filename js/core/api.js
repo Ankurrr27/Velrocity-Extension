@@ -10,12 +10,13 @@ export function storageSet(values) {
 }
 
 export async function getSettings() {
-  const result = await storageGet(["habtrackApiBase", "habtrackLastUsername", "habtrackAuthToken"]);
+  const result = await storageGet(["habtrackApiBase", "habtrackLastUsername", "habtrackAuthToken", "habtrackTheme"]);
 
   return {
     apiBase: (result.habtrackApiBase || DEFAULT_API_BASE).replace(/\/$/, ""),
     lastUsername: result.habtrackLastUsername || "",
     authToken: result.habtrackAuthToken || null,
+    theme: result.habtrackTheme || "dark",
   };
 }
 
