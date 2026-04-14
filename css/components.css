@@ -1,0 +1,147 @@
+/* TABS & BUTTONS - MINIMALIST UNBOXED */
+.tab-btn {
+  flex: 1;
+  padding: 14px 0;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  border-radius: 0;
+}
+
+.tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  background: transparent;
+  box-shadow: none;
+}
+
+.btn-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* CARDS - MINIMALIST UNBOXED */
+.habit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.habit-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0; /* Removing horizontal padding as shell has it */
+  border-bottom: 1px solid var(--border);
+  transition: all 0.2s ease;
+}
+
+.habit-card:last-child {
+  border-bottom: none;
+}
+
+.habit-card:hover {
+  border-color: rgba(99, 102, 241, 0.3);
+  transform: translateX(2px);
+}
+
+.habit-meta h3 {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.012em;
+}
+
+.habit-meta p {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 2px 0 0;
+  font-weight: 400;
+}
+
+/* ACTION PILLS */
+.habit-action {
+  padding: 8px 12px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: none;
+  cursor: pointer;
+  min-width: 84px;
+  transition: all 0.2s ease;
+}
+
+.habit-action.pending {
+  background: linear-gradient(135deg, var(--accent), var(--primary));
+  color: white;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.habit-action.done {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+/* INPUTS */
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  padding: 8px 0;
+  margin-bottom: 20px;
+}
+
+.input-group input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 13px;
+  color: var(--text);
+  padding: 0;
+}
+
+/* STATUS */
+.status-message {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.92);
+  color: white;
+  font-size: 13px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  z-index: 100;
+}
+
+.empty-state {
+  padding: 24px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+}

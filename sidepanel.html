@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Velrocity Sidepanel</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="elite-shell">
+    
+    <!-- PREMIUM HEADER -->
+    <header class="header">
+      <div class="brand">
+        <div class="brand-logo">⚡</div>
+        <div class="brand-info">
+          <h1>Velrocity</h1>
+          <p>Personal Workspace</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- NAVIGATION TABS -->
+    <div class="nav-wrapper">
+      <nav class="nav-tabs">
+        <button id="habitsTab" class="nav-btn active">Habits</button>
+        <button id="goalsTab" class="nav-btn">Goals</button>
+      </nav>
+    </div>
+
+    <!-- MAIN VIEWS AREA -->
+    <main id="appMain">
+      
+      <!-- MY HABITS VIEW -->
+      <section id="myPersonalHabitsView" class="app-view">
+        <div class="view-header" style="padding: 24px 24px 12px;">
+          <h2 style="font-size: 20px; font-weight: 800;">My Habits</h2>
+          <p style="font-size: 13px; color: rgb(var(--muted-text));">Scheduled for today</p>
+        </div>
+        <div id="myHabitsList" class="list-container">
+          <!-- Habits injected here -->
+        </div>
+      </section>
+
+      <!-- MY GOALS VIEW -->
+      <section id="myGoalsView" class="app-view hidden">
+        <div class="view-header" style="padding: 24px 24px 12px;">
+          <h2 style="font-size: 20px; font-weight: 800;">Primary Goals</h2>
+          <p id="todayLabel" style="font-size: 13px; color: rgb(var(--muted-text));">Focus on completion</p>
+        </div>
+        
+        <form id="myGoalsForm" class="search-group">
+          <input type="text" id="myGoalInput" class="input-shell" placeholder="Add a new goal..." required />
+          <button type="submit" class="btn-primary">Add</button>
+        </form>
+
+        <div id="myGoalsList" class="list-container">
+          <!-- Goals injected here -->
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER NAV / ACTIONS -->
+    <div style="position: fixed; bottom: 0; left: 0; right: 0; padding: 16px 24px; background: rgba(var(--bg-bottom), 0.9); backdrop-filter: blur(10px); border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+      <button id="openWebApp" class="action-pill pending" style="background: transparent; border: none; font-size: 11px; text-decoration: underline;">Open Dashboard</button>
+      <button id="openSettings" class="action-pill" style="width: 32px; height: 32px; padding: 0; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;">⚙️</button>
+    </div>
+
+  </div>
+
+  <div id="statusContainer">
+    <div id="statusMessage" class="status-toast hidden"></div>
+  </div>
+
+  <script type="module" src="sidepanel.js"></script>
+</body>
+</html>

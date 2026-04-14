@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Velrocity Extension",
+  "version": "2.0.0",
+  "description": "Premium habit tracking extension for Velrocity.",
+  "permissions": ["storage", "sidePanel"],
+  "host_permissions": ["https://*/*", "http://*/*"],
+  "icons": {
+    "128": "icon.png"
+  },
+  "action": {
+    "default_title": "Velrocity",
+    "default_icon": "icon.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "options_page": "options.html"
+}

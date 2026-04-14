@@ -1,0 +1,95 @@
+/* SHARED LAYOUT - MINIMALIST UNBOXED */
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* CRITICAL: Required for tab switching to work */
+.hidden {
+  display: none !important;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+.popup-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 0 16px 28px; /* Restoring the shell padding */
+}
+
+/* MINIMAL HEADER - BACK TO BASICS */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 16px 16px;
+  margin: 0 -16px; /* Fill full width */
+  background: var(--nav-bg);
+  backdrop-filter: blur(16px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  color: var(--text);
+  box-shadow: none;
+  border-radius: 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.hero-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hero-label {
+  font-size: 13px;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.hero-sub {
+  font-size: 10px;
+  color: var(--muted);
+  margin: 2px 0 0;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 600;
+}
+
+/* SIMPLE TABS - BACK TO BASICS */
+.nav-container {
+  padding: 0;
+  margin-bottom: 24px;
+  position: static;
+  background: transparent;
+}
+
+.tabs-nav {
+  display: flex;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  gap: 0;
+}
+
+.app-view {
+  flex: 1;
+  padding: 0;
+}
+
+.view-header {
+  margin-bottom: 20px;
+}
